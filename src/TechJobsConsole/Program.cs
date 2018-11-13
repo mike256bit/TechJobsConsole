@@ -43,6 +43,7 @@ namespace TechJobsConsole
                         List<string> results = JobData.FindAll(columnChoice);
 
                         Console.WriteLine("\n*** All " + columnChoices[columnChoice] + " Values ***");
+                        results.Sort();
                         foreach (string item in results)
                         {
                             Console.WriteLine(item);
@@ -63,7 +64,8 @@ namespace TechJobsConsole
                     // Fetch results
                     if (columnChoice.Equals("all"))
                     {
-                        Console.WriteLine("Search all fields not yet implemented.");
+                        searchResults = JobData.FindByValue(searchTerm);
+                        PrintJobs(searchResults);
                     }
                     else
                     {
@@ -100,7 +102,18 @@ namespace TechJobsConsole
                 }
 
                 string input = Console.ReadLine();
-                choiceIdx = int.Parse(input);
+
+                int choiceChk;
+                if (int.TryParse(input, out choiceChk))
+                {
+                    choiceIdx = choiceChk;
+                }
+                else
+                {
+                    choiceIdx = -1;
+                }
+
+                //choiceIdx = int.Parse(input);
 
                 if (choiceIdx < 0 || choiceIdx >= choiceKeys.Length)
                 {
@@ -118,7 +131,37 @@ namespace TechJobsConsole
 
         private static void PrintJobs(List<Dictionary<string, string>> someJobs)
         {
-            Console.WriteLine("printJobs is not implemented yet");
+            //iterate over list
+            //iterate thru each dictionary
+            //generate text block to represent dictionary data
+
+            if (someJobs.Count > 0)
+            {
+                int counter = 1;
+
+                foreach (Dictionary<string, string> listing in someJobs)
+                {
+                    Console.WriteLine(string.Format("\n-- Listing {0} --", counter));
+                    foreach (KeyValuePair<string, string> details in listing)
+                    {
+                        Console.WriteLine(string.Format("{0}: {1}", details.Key, details.Value));
+                    }
+
+                    Console.WriteLine("-----");
+                    counter++;
+
+                    if (counter % 5 == 0)
+                    {
+                        Console.WriteLine("\nPress enter to continue...");
+                        Console.ReadLine();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nNo jobs found matching that criteria.\nPress ENTER to continue...");
+                Console.ReadLine();
+            }
         }
     }
 }

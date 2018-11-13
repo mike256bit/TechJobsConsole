@@ -13,13 +13,16 @@ namespace TechJobsConsole
         public static List<Dictionary<string, string>> FindAll()
         {
             LoadData();
-            return AllJobs;
+            List<Dictionary<string,string>> JobsCopy = new List<Dictionary<string, string>>(AllJobs);
+            
+            return JobsCopy;
         }
 
         /*
          * Returns a list of all values contained in a given column,
          * without duplicates. 
          */
+
         public static List<string> FindAll(string column)
         {
             LoadData();
@@ -37,6 +40,29 @@ namespace TechJobsConsole
             }
             return values;
         }
+
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                foreach (KeyValuePair<string, string> listing in row)
+                {
+                    string aValue = listing.Value.ToLower();
+                    if (aValue.Contains(value.ToLower()) && !jobs.Contains(row))
+                    {
+                        jobs.Add(row);
+                    }
+                }
+            }
+
+            return jobs;
+        }
+
+
 
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
@@ -61,6 +87,7 @@ namespace TechJobsConsole
         /*
          * Load and parse data from job_data.csv
          */
+
         private static void LoadData()
         {
 
